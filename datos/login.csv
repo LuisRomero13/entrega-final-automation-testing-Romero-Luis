@@ -1,0 +1,7 @@
+usuario,clave,debe_funcionar,descripcion
+standard_user,secret_sauce,True,"Usuario válido con acceso completo"
+locked_out_user,secret_sauce,False,"Usuario bloqueado permanentemente"
+problem_user,secret_sauce,True,"Usuario con problemas de imágenes"
+performance_glitch_user,secret_sauce,True,"Usuario con latencia alta"
+visual_user,secret_sauce,True,"Usuario con problemas visuales de imágenes"
+usuario_malo,password_malo,False,"Credenciales inválidas"

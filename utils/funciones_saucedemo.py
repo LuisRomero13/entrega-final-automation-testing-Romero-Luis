@@ -1,3 +1,7 @@
+import os
+import re
+from datetime import datetime
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -41,6 +45,22 @@ def take_screenshot(driver, filename):
         print(f"Captura de pantalla guardada como {filename}")
     except Exception as e:
         print(f"Error al guardar la captura de pantalla: {e}")
+
+# Captura un screenshot automáticamente cuando un test falla.
+# Guarda el archivo en screenshots/fallos/ con nombre descriptivo que
+# incluye el nombre del test y la fecha/hora.
+def tomar_captura_fallo(driver, nombre_test):
+    try:
+        os.makedirs("screenshots/fallos", exist_ok=True)
+        nombre_seguro = re.sub(r"[^\w\-]", "_", nombre_test)
+        fecha_hora = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        ruta = f"screenshots/fallos/FALLO_{nombre_seguro}_{fecha_hora}.png"
+        driver.save_screenshot(ruta)
+        print(f"Captura de fallo guardada: {ruta}")
+        return ruta
+    except Exception as e:
+        print(f"Error al guardar la captura de fallo: {e}")
+        return None
 
 #  Obtiene el nombre y precio del primer producto visible en el catálogo.
 def obtener_primer_producto(driver): 
