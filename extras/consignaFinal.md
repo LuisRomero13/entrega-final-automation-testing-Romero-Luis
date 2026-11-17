@@ -11,10 +11,6 @@ Manejo de Datos de Prueba:
 - Implementa alguna forma de parametrización para ejecutar las pruebas con diferentes conjuntos de datos
 - Utiliza fuentes externas (archivos CSV, JSON, etc.) para leer los datos de prueba
 
-Manejo de Datos de Prueba:
-- Implementa alguna forma de parametrización para ejecutar las pruebas con diferentes conjuntos de datos
-- Utiliza fuentes externas (archivos CSV, JSON, etc.) para leer los datos de prueba
-
 Implementación de Page Object Model:
 - Crea clases para cada página que vayas a automatizar
 - Implementa métodos que representen acciones en cada página

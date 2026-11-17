@@ -29,12 +29,14 @@ def usuario_logueado(driver):
     return InventoryPage(driver)
 
 
-@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+@pytest.hookimpl(wrapper=True)
 def pytest_runtest_makereport(item, call):
-    """Captura un screenshot automáticamente cuando un test falla."""
-    resultado = yield
-    reporte = resultado.get_result()
+    """Guarda una captura cuando el test falla durante su ejecución."""
+    reporte = yield
+
     if reporte.when == "call" and reporte.failed:
         driver = item.funcargs.get("driver")
-        if driver:
+        if driver is not None:
             tomar_captura_fallo(driver, item.name)
+
+    return reporte

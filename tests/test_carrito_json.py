@@ -5,8 +5,12 @@ from utils.datos import leer_json_productos
 PRODUCTOS = leer_json_productos()
 
 
+def id_producto(producto):
+    return producto["nombre"]
+
+
 # Test que agrega cada producto del JSON al carrito
-@pytest.mark.parametrize("producto", PRODUCTOS, ids=lambda producto: producto["nombre"])
+@pytest.mark.parametrize("producto", PRODUCTOS, ids=id_producto)
 def test_agregar_producto_desde_json(usuario_logueado, producto):
     print(f"Agregando producto: {producto['nombre']}")
 
