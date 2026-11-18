@@ -3,6 +3,8 @@ from datetime import datetime
 import pytest
 import requests
 
+from utils.logger import logger
+
 CASOS_USUARIO = [
     ("Luis Romero", "QA Automation"),
     ("Ana Perez", "Developer"),
@@ -13,9 +15,11 @@ CASOS_USUARIO = [
 @pytest.mark.api
 @pytest.mark.parametrize("nombre, trabajo", CASOS_USUARIO)
 def test_create_user_api(reqres_url, nombre, trabajo):
+    logger.info("Creando usuario API: %s - %s", nombre, trabajo)
     payload = {"name": nombre, "job": trabajo}
 
     response = requests.post(reqres_url("/users"), json=payload, timeout=10)
+    logger.info("POST /users respondió con status=%s", response.status_code)
 
     assert response.status_code == 201
     assert "application/json" in response.headers.get("Content-Type", "")

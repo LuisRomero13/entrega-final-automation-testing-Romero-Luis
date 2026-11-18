@@ -1,6 +1,7 @@
 import pytest
 
 from utils.datos import leer_json_productos
+from utils.logger import logger
 
 PRODUCTOS = leer_json_productos()
 
@@ -12,7 +13,7 @@ def id_producto(producto):
 # Test que agrega cada producto del JSON al carrito
 @pytest.mark.parametrize("producto", PRODUCTOS, ids=id_producto)
 def test_agregar_producto_desde_json(usuario_logueado, producto):
-    print(f"Agregando producto: {producto['nombre']}")
+    logger.info("Agregando producto desde JSON: %s", producto["nombre"])
 
     usuario_logueado.agregar_producto(producto["nombre"])
 
@@ -26,11 +27,12 @@ def test_agregar_producto_desde_json(usuario_logueado, producto):
     # Verificar que el precio mostrado coincida con el del JSON
     precio_mostrado = float(cart_page.obtener_precios_productos()[0].replace("$", ""))
     assert precio_mostrado == producto["precio"]
-    print(f"Precio verificado: {precio_mostrado}")
+    logger.info("Precio verificado para %s: %s", producto["nombre"], precio_mostrado)
 
 
 # Test de smoke que verifica funcionalidad básica del carrito
 @pytest.mark.smoke
 def test_carrito_smoke(usuario_logueado):
+    logger.info("Ejecutando smoke test del carrito")
     usuario_logueado.agregar_primer_producto()
     assert usuario_logueado.obtener_contador_carrito() == 1

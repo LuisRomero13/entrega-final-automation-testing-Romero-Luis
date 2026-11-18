@@ -2,6 +2,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from utils.logger import logger
+
 
 class CartPage:
     _CART_ITEMS = (By.CLASS_NAME, "cart_item")
@@ -23,7 +25,9 @@ class CartPage:
     def obtener_nombres_productos(self):
         """Obtiene los nombres de todos los productos en el carrito."""
         elementos_nombre = self.driver.find_elements(*self._ITEM_NAMES)
-        return [elemento.text for elemento in elementos_nombre]
+        nombres = [elemento.text for elemento in elementos_nombre]
+        logger.info("Productos en el carrito: %s", nombres)
+        return nombres
 
     def obtener_precios_productos(self):
         """Obtiene los precios de todos los productos en el carrito."""
@@ -38,6 +42,7 @@ class CartPage:
 
     def proceder_checkout(self):
         """Inicia el proceso de checkout."""
+        logger.info("Iniciando proceso de checkout")
         self.driver.find_element(*self._CHECKOUT_BUTTON).click()
         from pages.checkout_page import CheckoutPage
         return CheckoutPage(self.driver)

@@ -2,6 +2,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from utils.logger import logger
+
 
 class CheckoutPage:
     # Paso 1: formulario de datos personales (checkout-step-one.html)
@@ -19,6 +21,12 @@ class CheckoutPage:
 
     def completar_formulario(self, nombre, apellido, codigo_postal):
         """Completa el formulario de datos personales."""
+        logger.info(
+            "Completando formulario de checkout para: %s %s (%s)",
+            nombre,
+            apellido,
+            codigo_postal,
+        )
         campo_nombre = self.wait.until(
             EC.visibility_of_element_located(self._FIRST_NAME)
         )
@@ -29,6 +37,7 @@ class CheckoutPage:
 
     def continuar(self):
         """Avanza al resumen de la orden (paso 2)."""
+        logger.info("Avanzando al resumen de la orden")
         self.driver.find_element(*self._CONTINUE_BUTTON).click()
         return CheckoutResumenPage(self.driver)
 
@@ -65,6 +74,7 @@ class CheckoutResumenPage:
 
     def finalizar_compra(self):
         """Finaliza la compra y navega a la página de confirmación."""
+        logger.info("Finalizando la compra")
         self.driver.find_element(*self._FINISH_BUTTON).click()
         return CheckoutCompletaPage(self.driver)
 

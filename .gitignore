@@ -5,3 +5,9 @@ tests/__pycache__/
 utils/__pycache__/
 pages/__pycache__/
 extras/__pycache__/
+test_api/__pycache__/
+
+# Logs y capturas generadas durante la ejecución
+logs/*.log
+logs/*.log.*
+reports/screens/*.png
