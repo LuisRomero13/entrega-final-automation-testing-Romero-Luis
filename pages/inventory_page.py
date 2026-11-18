@@ -2,6 +2,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from utils.logger import logger
+
 
 class InventoryPage:
     _TITLE = (By.CLASS_NAME, "title")
@@ -27,7 +29,9 @@ class InventoryPage:
 
     def obtener_productos(self):
         """Obtiene la lista de productos disponibles."""
-        return self.driver.find_elements(*self._PRODUCTS)
+        productos = self.driver.find_elements(*self._PRODUCTS)
+        logger.info("Productos visibles en el catálogo: %s", len(productos))
+        return productos
 
     def obtener_primer_producto(self):
         """Obtiene (nombre, precio) del primer producto del catálogo."""
@@ -38,12 +42,14 @@ class InventoryPage:
 
     def agregar_primer_producto(self):
         """Añade el primer producto disponible al carrito."""
+        logger.info("Agregando el primer producto al carrito")
         primer_boton = self.driver.find_elements(*self._ADD_BUTTONS)[0]
         primer_boton.click()
         return self
 
     def agregar_producto(self, nombre_producto):
         """Añade al carrito el producto cuyo nombre coincide con nombre_producto."""
+        logger.info("Agregando producto al carrito: %s", nombre_producto)
         slug = nombre_producto.lower().replace(" ", "-")
         boton = self.wait.until(
             EC.element_to_be_clickable(
@@ -72,6 +78,7 @@ class InventoryPage:
 
     def ir_al_carrito(self):
         """Navega a la página del carrito."""
+        logger.info("Navegando al carrito de compras")
         self.driver.find_element(*self._CART_LINK).click()
         # Importación lazy para evitar dependencias circulares
         from pages.cart_page import CartPage
@@ -79,6 +86,7 @@ class InventoryPage:
 
     def hacer_logout(self):
         """Cierra la sesión del usuario."""
+        logger.info("Cerrando sesión del usuario")
         self.driver.find_element(*self._MENU_BUTTON).click()
         logout_link = self.wait.until(
             EC.element_to_be_clickable(self._LOGOUT_LINK)

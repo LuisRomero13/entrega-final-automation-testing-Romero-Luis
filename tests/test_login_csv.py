@@ -3,6 +3,7 @@ import pytest
 from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
 from utils.datos import leer_csv_login
+from utils.logger import logger
 
 CASOS_LOGIN = leer_csv_login()
 
@@ -12,7 +13,7 @@ CASOS_LOGIN = leer_csv_login()
     "usuario, clave, debe_funcionar, descripcion", CASOS_LOGIN
 )
 def test_login_desde_csv(driver, usuario, clave, debe_funcionar, descripcion):
-    print(f'Caso: {descripcion}')
+    logger.info("Ejecutando caso de login: %s", descripcion)
 
     login_page = LoginPage(driver).abrir()
     login_page.login_completo(usuario, clave)
@@ -24,12 +25,14 @@ def test_login_desde_csv(driver, usuario, clave, debe_funcionar, descripcion):
     else:
         # Si no debe funcionar, verificamos que hay un mensaje de error
         assert login_page.esta_error_visible()
-        print('Mensaje de error:', login_page.obtener_mensaje_error())
+        logger.info("Mensaje de error mostrado: %s", login_page.obtener_mensaje_error())
 
 
 # Test de smoke para verificar que al menos un login funciona
 @pytest.mark.smoke
 def test_login_usuario_valido_smoke(driver):
+    logger.info("Iniciando login con usuario estándar")
     login_page = LoginPage(driver).abrir()
     login_page.login_completo("standard_user", "secret_sauce")
     assert "/inventory.html" in driver.current_url
+    logger.info("Login exitoso, redirigido a: %s", driver.current_url)

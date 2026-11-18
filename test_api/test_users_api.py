@@ -1,15 +1,19 @@
 import pytest
 import requests
 
+from utils.logger import logger
+
 CAMPOS_USUARIO = {"id", "email", "first_name", "last_name", "avatar"}
 
 
 @pytest.mark.api
 @pytest.mark.smoke
 def test_get_users_page_1(reqres_url):
+    logger.info("Consultando usuarios de la página 1")
     response = requests.get(reqres_url("/users?page=1"), timeout=10)
 
     assert response.status_code == 200
+    logger.info("GET /users respondió con status=%s", response.status_code)
     assert "application/json" in response.headers.get("Content-Type", "")
 
     body = response.json()

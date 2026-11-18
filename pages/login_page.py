@@ -2,6 +2,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from utils.logger import logger
+
 
 class LoginPage:
     # 1. IDENTIDAD DE LA PÁGINA
@@ -26,11 +28,13 @@ class LoginPage:
     # 4. MÉTODOS DE NAVEGACIÓN Y ACCIÓN
     def abrir(self):
         """Carga la URL de login en el navegador."""
+        logger.info("Navegando a la página de login: %s", self.URL)
         self.driver.get(self.URL)
         return self
 
     def completar_usuario(self, usuario: str):
         """Escribe el nombre de usuario."""
+        logger.info("Ingresando usuario: %s", usuario)
         campo = self.wait.until(EC.visibility_of_element_located(self._USER_INPUT))
         campo.clear()
         campo.send_keys(usuario)
@@ -38,6 +42,7 @@ class LoginPage:
 
     def completar_clave(self, clave: str):
         """Escribe la contraseña."""
+        logger.info("Ingresando contraseña")
         campo = self.driver.find_element(*self._PASS_INPUT)
         campo.clear()
         campo.send_keys(clave)
@@ -45,6 +50,7 @@ class LoginPage:
 
     def hacer_clic_login(self):
         """Hace clic en el botón Login."""
+        logger.info("Enviando formulario de login")
         self.driver.find_element(*self._LOGIN_BUTTON).click()
         return self
 

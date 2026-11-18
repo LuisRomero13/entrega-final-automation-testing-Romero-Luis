@@ -1,6 +1,8 @@
 import pytest
 import requests
 
+from utils.logger import logger
+
 POST_ID = 1
 CAMPOS_POST = {"id", "title", "body", "userId"}
 
@@ -14,9 +16,11 @@ def test_put_post(jsonplaceholder_url):
         "userId": 1,
     }
 
+    logger.info("Actualizando post %s con PUT", POST_ID)
     response = requests.put(
         jsonplaceholder_url(f"/posts/{POST_ID}"), json=payload, timeout=10
     )
+    logger.info("PUT /posts/%s respondió con status=%s", POST_ID, response.status_code)
 
     assert response.status_code == 200
     assert "application/json" in response.headers.get("Content-Type", "")
@@ -34,9 +38,11 @@ def test_put_post(jsonplaceholder_url):
 def test_patch_post(jsonplaceholder_url):
     payload = {"title": "Título actualizado por PATCH"}
 
+    logger.info("Actualizando post %s con PATCH", POST_ID)
     response = requests.patch(
         jsonplaceholder_url(f"/posts/{POST_ID}"), json=payload, timeout=10
     )
+    logger.info("PATCH /posts/%s respondió con status=%s", POST_ID, response.status_code)
 
     assert response.status_code == 200
     assert "application/json" in response.headers.get("Content-Type", "")
@@ -52,9 +58,11 @@ def test_patch_post(jsonplaceholder_url):
 
 @pytest.mark.api
 def test_delete_post(jsonplaceholder_url):
+    logger.info("Eliminando post %s", POST_ID)
     response = requests.delete(
         jsonplaceholder_url(f"/posts/{POST_ID}"), timeout=10
     )
+    logger.info("DELETE /posts/%s respondió con status=%s", POST_ID, response.status_code)
 
     assert response.status_code in (200, 204)
     if response.status_code == 200:
@@ -65,8 +73,10 @@ def test_delete_post(jsonplaceholder_url):
 
 @pytest.mark.api
 def test_get_post_inexistente(jsonplaceholder_url):
+    logger.info("Solicitando un post inexistente")
     response = requests.get(
         jsonplaceholder_url("/posts/999999"), timeout=10
     )
+    logger.info("GET /posts/999999 respondió con status=%s", response.status_code)
 
     assert response.status_code == 404
